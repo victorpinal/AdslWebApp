@@ -1,0 +1,30 @@
+@CHARSET "ISO-8859-1";
+* {
+    margin: 0;
+}
+html, body {
+    height: 100%;
+}
+.wrapper {
+    min-height: 100%;
+    /*height: auto !important;*/
+    height: 100%;
+    margin: 0 auto -50px; /* the bottom margin is the negative value of the footer's height */
+}
+.footer{
+    height: 50px; /* .push must be the same height as .footer */
+}
+.left-side {
+	float:left;
+	width: 282px; 
+}
+#resumen {
+	height: 417px;
+	width:100%; 
+}
+.right-side {
+    float: left;
+    height: 100%;
+    margin-bottom: -50px;
+    width: 350px;
+}
