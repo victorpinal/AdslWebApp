@@ -12,7 +12,7 @@ import java.util.prefs.Preferences;
  */
 public class mySQL {
 
-    private static final mySQL instance = new mySQL();
+    private static mySQL instance;
     private static final Logger _log = Logger.getLogger(mySQL.class.getName());
     private String connectionString;
     
@@ -22,17 +22,17 @@ public class mySQL {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            _log.log(Level.SEVERE, "Driver no encontrado", e);
+            _log.log(Level.SEVERE, "mySQL -> Driver no encontrado", e);
         }
 
     }
     
     private void loadConnectionString() throws PreferenceException {
         
-        // Leemos los datos de la conexión de las preferencias de usuario
+        // Leemos los datos de la conexiÃƒÂ³n de las preferencias de usuario
         Preferences pref = Preferences.userNodeForPackage(mySQL.class);
         if (pref.get("servidor", null) == null || pref.get("password", null) == null) {
-            _log.log(Level.SEVERE, "readPreferences -> preferencias no encontradas");
+            _log.log(Level.SEVERE, "loadConnectionString -> preferencias no encontradas");
             throw new PreferenceException();
         } else {
             this.connectionString = String.format("jdbc:mysql://%1$s:%2$s/adsl?user=%3$s&password=%4$s", pref.get("servidor", "localhost"),
@@ -41,28 +41,29 @@ public class mySQL {
 
     }
 
-    public void writePreferences(Preferences arg) {
+    public void writePreferences(DatosConexion arg) {
 
         Preferences pref = Preferences.userNodeForPackage(mySQL.class);
-        pref.put("servidor", arg.get("servidor", null));
-        pref.put("puerto", arg.get("puerto", null));
-        pref.put("usuario", arg.get("usuario", null));
-        pref.put("password", arg.get("password", null));
+        pref.put("servidor", arg!=null?arg.getMysqlserver():"");
+        pref.put("puerto", arg!=null?arg.getMysqlport():"");
+        pref.put("usuario", arg!=null?arg.getMysqluser():"");
+        pref.put("password", arg!=null?arg.getMysqlpwd():"");
 
     }
     
-    public static mySQL getMySQL() {
-        return instance;
+    public static mySQL getInstance() {                
+        return instance==null?new mySQL():instance;
     }
 
     public Connection getConnection() throws SQLException,PreferenceException {
 
-        if (connectionString != "") {
+        if (connectionString!=null && connectionString!= "") {
             return DriverManager.getConnection(connectionString);
-        } else {            
+        } else {                        
+            _log.info("getConnection -> connection string vacÃ­a intentando cargar...");
             loadConnectionString();
-            _log.log(Level.SEVERE, "getConnection -> connection string vacía");
-            return null;
+            _log.info("getConnection -> connection string cargada");
+            return getConnection();
         }
 
     }

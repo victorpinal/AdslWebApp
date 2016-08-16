@@ -8,10 +8,10 @@
 </head>
 <body>
     <s:form>
-        <s:textfield key="mysqlserver"></s:textfield>
-        <s:textfield key="mysqlport" type="number"></s:textfield>
-        <s:textfield key="mysqluser"></s:textfield>
-        <s:textfield key="mysqlpwd" type="password"></s:textfield>
+        <s:textfield key="datosConexion.mysqlserver"></s:textfield>
+        <s:textfield key="datosConexion.mysqlport" type="number"></s:textfield>
+        <s:textfield key="datosConexion.mysqluser"></s:textfield>
+        <s:textfield key="datosConexion.mysqlpwd" type="password"></s:textfield>
         <s:submit></s:submit>
     </s:form>
 </body>

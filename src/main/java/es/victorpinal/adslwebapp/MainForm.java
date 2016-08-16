@@ -32,7 +32,9 @@ public class MainForm extends ActionSupport implements ParameterAware {
 	 * VARIABLES
 	 */
 
+	private mySQL my_SQL = mySQL.getInstance();
 	private Map<String, String[]> params;
+	private DatosConexion datosConexion;
 
 	private Vector<Ip_Class> datosIp; // Listado con las ips de la BBDD
 	private int idSelected; // id seleccionada en el form
@@ -43,6 +45,14 @@ public class MainForm extends ActionSupport implements ParameterAware {
 	 * GETTERS/SETTERS
 	 */
 
+	public void setDatosConexion(DatosConexion datos) {
+	    datosConexion = datos;
+	}
+	
+	public DatosConexion getDatosConexion() {
+	    return datosConexion;
+	}
+	
 	public void setIdSelected(int id) {
 		this.idSelected = id;
 	}
@@ -73,17 +83,30 @@ public class MainForm extends ActionSupport implements ParameterAware {
 	 */
 
 	@Override
-	public String execute() throws Exception {
+	public String execute() {
 
 		_log.entering(this.getClass().getName(), "execute");
+		
+		//Comprobamos si estamos guardando los datos de conexiÃƒÂ³n una vez lo hemos establecido
+		if (datosConexion!=null) {
+		    my_SQL.writePreferences(datosConexion);
+		    datosConexion = null;
+		}
 
+		//Cargamos los datos de las IPs
 		datosIp = new Vector<>();
-		try (ResultSet res = mySQL.getMySQL().getConnection().createStatement().executeQuery("SELECT * FROM ip")) {
+		try (ResultSet res = my_SQL.getConnection().createStatement().executeQuery("SELECT * FROM ip")) {
 			while (res.next()) {
 				datosIp.addElement(new Ip_Class(res.getInt("id"), res.getString("ip"), res.getString("name")));
 			}
+		} catch (PreferenceException e) {
+		    _log.log(Level.SEVERE, "Error creando conexiÃƒÂ³n, no existen los parametros de conexiÃƒÂ³n mySQL");
+		    datosConexion = new DatosConexion();
+		    return "error_conexion";
 		} catch (Exception e) {
 			_log.log(Level.SEVERE, "Error leyendo ips", e);
+			my_SQL.writePreferences(null); //reiniciamos las preferencias
+			return "error_conexion";
 		}
 
 		if (idSelected == 0) { //la primera vez buscamos los datos locales
@@ -98,17 +121,24 @@ public class MainForm extends ActionSupport implements ParameterAware {
 		return SUCCESS;
 	}
 	
-	private void getLocalData() throws UnknownHostException {
+	private void getLocalData() {
 	    
-	 // buscamos la Ip_Class externa del equipo
+	    // buscamos la Ip_Class externa del equipo
         String ip = "127.0.0.1";
-        String hostname = InetAddress.getLocalHost().getHostName();
+        String hostname = "localhost";
+        
+        try {
+            hostname = InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e1) {
+            _log.severe("getLocalData -> No ha sido posible obtener el nombre de host");
+        }
+        
         try {
             URL whatismyip = new URL("http://checkip.amazonaws.com");
             BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
             ip = in.readLine(); // you get the IP as a String
         } catch (IOException e) {
-            e.printStackTrace();
+            _log.log(Level.SEVERE,"getLocalData -> No ha sido posible obtener la ip del host",e);
         }
         
         for (Ip_Class e : datosIp) {
@@ -122,10 +152,10 @@ public class MainForm extends ActionSupport implements ParameterAware {
 
 		//String[] id = params.get("id");
 		datos = new Vector<String[]>();
-		// añadimos las cabeceras
+		// aÃƒÂ±adimos las cabeceras
 		datos.add(new String[] { "Hora", "Down", "Up", "Att.Down", "Att.Up" });
 
-		try (PreparedStatement stmt = mySQL.getMySQL().getConnection().prepareStatement(
+		try (PreparedStatement stmt = my_SQL.getConnection().prepareStatement(
 				"SELECT time,download,upload,attdownrate,attuprate FROM datos WHERE ip_id=? ORDER BY time DESC")) {
 
 			stmt.setInt(1, idSelected);
@@ -152,7 +182,7 @@ public class MainForm extends ActionSupport implements ParameterAware {
 
 	public String cargaResumen() {
 
-		try (PreparedStatement stmt = mySQL.getMySQL().getConnection()
+		try (PreparedStatement stmt = my_SQL.getConnection()
 				.prepareStatement("SELECT * FROM resumen WHERE ip_id=?")) {
 
 			stmt.setInt(1, idSelected);
@@ -164,7 +194,7 @@ public class MainForm extends ActionSupport implements ParameterAware {
 			while (res.next()) {
 
 				formatter.format("%6s registros %n", res.getInt("NumRecords"));
-				formatter.format("%6s días desde %s %n", res.getInt("NumDays"),
+				formatter.format("%6s dÃƒÂ­as desde %s %n", res.getInt("NumDays"),
 						new SimpleDateFormat("dd/MM/yy HH:mm").format(res.getTimestamp("Min_Date")));
 				formatter.format("%nUltimo %s %n",
 						new SimpleDateFormat("dd/MM/yy HH:mm").format(res.getTimestamp("Max_Date")));

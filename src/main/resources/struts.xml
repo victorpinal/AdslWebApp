@@ -12,6 +12,16 @@
     <package name="default" namespace="/" extends="struts-default, json-default">
 
         <default-action-ref name="index" />
+        
+        <global-results>
+            <result name="error">JSP/error.jsp</result>
+            <result name="error_interno">JSP/error.jsp</result>
+        </global-results>
+        
+        <global-exception-mappings>
+            <exception-mapping result="error_interno" exception="java.lang.Exception"></exception-mapping>
+            <exception-mapping result="error_interno" exception="java.sql.SQLException"></exception-mapping>
+        </global-exception-mappings>
 
         <action name="index" class="es.victorpinal.adslwebapp.MainForm">
             <!-- 
@@ -23,6 +33,10 @@
             <result name="error_conexion">JSP/datosConexion.jsp</result>
             <result name="login">JSP/login.jsp</result>
             <result>JSP/main.jsp</result>
+        </action>
+        
+        <action name="getProperties">
+            <result>JSP/datosConexion.jsp</result>
         </action>
 
         <action name="index_getResumen" class="es.victorpinal.adslwebapp.MainForm" method="cargaResumen">
