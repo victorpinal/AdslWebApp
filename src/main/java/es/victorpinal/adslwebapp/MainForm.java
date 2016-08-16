@@ -78,7 +78,7 @@ public class MainForm extends ActionSupport implements ParameterAware {
 		_log.entering(this.getClass().getName(), "execute");
 
 		datosIp = new Vector<>();
-		try (ResultSet res = mySQL.get().getConnection().createStatement().executeQuery("SELECT * FROM ip")) {
+		try (ResultSet res = mySQL.getMySQL().getConnection().createStatement().executeQuery("SELECT * FROM ip")) {
 			while (res.next()) {
 				datosIp.addElement(new Ip_Class(res.getInt("id"), res.getString("ip"), res.getString("name")));
 			}
@@ -125,7 +125,7 @@ public class MainForm extends ActionSupport implements ParameterAware {
 		// añadimos las cabeceras
 		datos.add(new String[] { "Hora", "Down", "Up", "Att.Down", "Att.Up" });
 
-		try (PreparedStatement stmt = mySQL.get().getConnection().prepareStatement(
+		try (PreparedStatement stmt = mySQL.getMySQL().getConnection().prepareStatement(
 				"SELECT time,download,upload,attdownrate,attuprate FROM datos WHERE ip_id=? ORDER BY time DESC")) {
 
 			stmt.setInt(1, idSelected);
@@ -152,7 +152,7 @@ public class MainForm extends ActionSupport implements ParameterAware {
 
 	public String cargaResumen() {
 
-		try (PreparedStatement stmt = mySQL.get().getConnection()
+		try (PreparedStatement stmt = mySQL.getMySQL().getConnection()
 				.prepareStatement("SELECT * FROM resumen WHERE ip_id=?")) {
 
 			stmt.setInt(1, idSelected);
