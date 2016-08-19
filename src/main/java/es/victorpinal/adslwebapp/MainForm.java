@@ -153,7 +153,7 @@ public class MainForm extends ActionSupport implements ParameterAware {
 		//String[] id = params.get("id");
 		datos = new Vector<String[]>();
 		// aÃƒÂ±adimos las cabeceras
-		datos.add(new String[] { "Hora", "Down", "Up", "Att.Down", "Att.Up" });
+		//datos.add(new String[] { "Hora", "Down", "Up", "Att.Down", "Att.Up" });
 
 		try (PreparedStatement stmt = my_SQL.getConnection().prepareStatement(
 				"SELECT time,download,upload,attdownrate,attuprate FROM datos WHERE ip_id=? ORDER BY time DESC")) {
@@ -163,7 +163,7 @@ public class MainForm extends ActionSupport implements ParameterAware {
 			
 			while (res.next()) {
 				String[] datos_temp = new String[5];
-				datos_temp[0] = new SimpleDateFormat("dd/MM/yy HH:mm").format(res.getTimestamp("time"));
+				datos_temp[0] = new SimpleDateFormat("HH:mm").format(res.getTimestamp("time"));
 				datos_temp[1] = res.getString("download");
 				datos_temp[2] = res.getString("upload");
 				datos_temp[3] = res.getString("attdownrate");

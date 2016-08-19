@@ -9,7 +9,7 @@
         <Logger name="com.opensymphony.xwork2" level="info"/>
         <Logger name="org.apache.struts2" level="info"/>
         <Logger name="es.victorpinal" level="debug"/>
-        <Root level="warn">
+        <Root level="debug">
             <AppenderRef ref="STDOUT"/>
         </Root>
     </Loggers>
