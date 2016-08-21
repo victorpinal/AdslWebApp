@@ -18,7 +18,7 @@ public class mySQL {
     
 
     private mySQL() {
-
+    	
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -29,9 +29,9 @@ public class mySQL {
     
     private void loadConnectionString() throws PreferenceException {
         
-        // Leemos los datos de la conexiÃƒÂ³n de las preferencias de usuario
+        // Leemos los datos de la conexión de las preferencias de usuario
         Preferences pref = Preferences.userNodeForPackage(mySQL.class);
-        if (pref.get("servidor", null) == null || pref.get("password", null) == null) {
+        if (pref.get("servidor", null) == null || pref.get("usuario", null) == null || pref.get("password", null) == null) {
             _log.log(Level.SEVERE, "loadConnectionString -> preferencias no encontradas");
             throw new PreferenceException();
         } else {
@@ -45,7 +45,7 @@ public class mySQL {
 
         Preferences pref = Preferences.userNodeForPackage(mySQL.class);
         pref.put("servidor", arg!=null?arg.getMysqlserver():"");
-        pref.put("puerto", arg!=null?arg.getMysqlport():"");
+        pref.put("puerto", arg!=null?arg.getMysqlport():"3306");
         pref.put("usuario", arg!=null?arg.getMysqluser():"");
         pref.put("password", arg!=null?arg.getMysqlpwd():"");
 
@@ -60,9 +60,8 @@ public class mySQL {
         if (connectionString!=null && connectionString!= "") {
             return DriverManager.getConnection(connectionString);
         } else {                        
-            _log.info("getConnection -> connection string vacÃ­a intentando cargar...");
-            loadConnectionString();
-            _log.info("getConnection -> connection string cargada");
+            _log.info("getConnection -> connectionstring vacía ...");
+            loadConnectionString();            
             return getConnection();
         }
 

@@ -10,7 +10,7 @@
     <s:form>
         <s:textfield key="datosConexion.mysqlserver"></s:textfield>
         <s:textfield key="datosConexion.mysqlport" type="number"></s:textfield>
-        <s:textfield key="datosConexion.mysqluser"></s:textfield>
+        <s:textfield key="datosConexion.mysqluser" placeholder="sa"></s:textfield>
         <s:textfield key="datosConexion.mysqlpwd" type="password"></s:textfield>
         <s:submit></s:submit>
     </s:form>

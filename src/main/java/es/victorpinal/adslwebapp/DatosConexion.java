@@ -2,8 +2,8 @@ package es.victorpinal.adslwebapp;
 
 public class DatosConexion {
 
-    private String mysqlserver;
-    private String mysqlport;
+    private String mysqlserver = "localhost";
+    private String mysqlport = "3306";
     private String mysqluser;
     private String mysqlpwd;
     
