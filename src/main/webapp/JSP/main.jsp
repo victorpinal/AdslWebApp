@@ -17,13 +17,25 @@
         <div class="left-side">
             <s:form id="FRM_ips">
                 <s:select key="idSelected" list="datosIp" listKey="id" onchange="$('#FRM_ips').submit();" />
-                <input type="submit" value="Reload">
-                <label for="fechaInicio" title="Fecha inicial"></label>
-                <input type="date" name="fechaInicio">
-                <label for="fechaFin" title="hasta"></label>
-                <input type="date" name="fechaFin">
+                <s:submit></s:submit>                               
+                <s:textfield type="date" key="fechaIni"></s:textfield>                                
+                <s:textfield type="date" key="fechaFin"></s:textfield>                                     
             </s:form>
-            <s:textarea name="resumen"></s:textarea>            
+            <textarea><s:property value="resumen"></s:property></textarea>    
+            <table>
+                <tr>
+                    <th>Hora</th><th>Down</th><th>Up</th><th>Att.Down</th><th>Att.Up</th>
+                </tr>
+                <s:iterator value="datos" var="dato">                
+                    <tr>
+                        <td class="tdLabel"><s:property value="#dato[0]" /></td>
+                        <td class="tdLabel"><s:property value="#dato[1]" /></td>
+                        <td class="tdLabel"><s:property value="#dato[2]" /></td>
+                        <td class="tdLabel"><s:property value="#dato[3]" /></td>
+                        <td class="tdLabel"><s:property value="#dato[4]" /></td>
+                    </tr>
+                </s:iterator>
+            </table>                 
         </div>
         <div class="right-side">
         <canvas id="myChart" width="800" height="600"></canvas>
@@ -35,21 +47,24 @@
                     datasets:[{                    	
                         label: 'Down',
                         fill:false,
+                        pointBackgroundColor:'#0f0',
                         data:[                              
                             <s:iterator value="datos" var="dato" status="incr">                            
                             {x:'2016-01-01 <s:property value="%{#dato[0].split(' ')[1]}"/>',y:<s:property value="#dato[1]" />},
                             </s:iterator>
                             ]
                     },
-                    /* {                     
+                    {                     
                         label: 'Up',
                         fill:false,
+                        pointBackgroundColor:'#f00',
                         data:[                              
                             <s:iterator value="datos" var="dato" status="incr">
-                            {x:<s:property value="%{#incr.index}"/>,y:<s:property value="#dato[2]" />},                                
+                            //{x:<s:property value="%{#incr.index}"/>,y:<s:property value="#dato[2]" />},   
+                            {x:'2016-01-01 <s:property value="%{#dato[0].split(' ')[1]}"/>',y:<s:property value="#dato[2]" />},
                             </s:iterator>
                             ]
-                    } */
+                    }
                     ]
                 },
                 options: {
@@ -63,21 +78,7 @@
                     }
                 }
             });
-        </script>
-		<table border="1">
-		    <tr>
-		        <th>Hora</th><th>Down</th><th>Up</th><th>Att.Down</th><th>Att.Up</th>
-		    </tr>
-		    <s:iterator value="datos" var="dato">                
-		        <tr>
-		            <td class="tdLabel"><s:property value="#dato[0]" /></td>
-		            <td class="tdLabel"><s:property value="#dato[1]" /></td>
-		            <td class="tdLabel"><s:property value="#dato[2]" /></td>
-		            <td class="tdLabel"><s:property value="#dato[3]" /></td>
-		            <td class="tdLabel"><s:property value="#dato[4]" /></td>
-		        </tr>
-		    </s:iterator>
-		</table>            
+        </script>		  
         </div>
     </div>
     <!-- <div class="footer">

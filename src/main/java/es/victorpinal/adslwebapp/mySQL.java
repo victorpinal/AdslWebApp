@@ -22,7 +22,7 @@ public class mySQL {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            _log.log(Level.SEVERE, "mySQL -> Driver no encontrado", e);
+            _log.severe("mySQL -> Driver no encontrado");
         }
 
     }
@@ -32,7 +32,7 @@ public class mySQL {
         // Leemos los datos de la conexión de las preferencias de usuario
         Preferences pref = Preferences.userNodeForPackage(mySQL.class);
         if (pref.get("servidor", null) == null || pref.get("usuario", null) == null || pref.get("password", null) == null) {
-            _log.log(Level.SEVERE, "loadConnectionString -> preferencias no encontradas");
+            _log.info("mySQL -> Preferencias no encontradas");
             throw new PreferenceException();
         } else {
             this.connectionString = String.format("jdbc:mysql://%1$s:%2$s/adsl?user=%3$s&password=%4$s", pref.get("servidor", "localhost"),
@@ -43,6 +43,7 @@ public class mySQL {
 
     public void writePreferences(DatosConexion arg) {
 
+        _log.info("mySQL -> Guardando las preferencias de conexión.");
         Preferences pref = Preferences.userNodeForPackage(mySQL.class);
         pref.put("servidor", arg!=null?arg.getMysqlserver():"");
         pref.put("puerto", arg!=null?arg.getMysqlport():"3306");
@@ -51,7 +52,8 @@ public class mySQL {
 
     }
     
-    public static mySQL getInstance() {                
+    public static mySQL getInstance() {      
+        _log.info("mySQL -> getInstance()");
         return instance==null?new mySQL():instance;
     }
 
@@ -60,7 +62,7 @@ public class mySQL {
         if (connectionString!=null && connectionString!= "") {
             return DriverManager.getConnection(connectionString);
         } else {                        
-            _log.info("getConnection -> connectionstring vacía ...");
+            _log.info("mySQL -> connectionstring vacía ...");
             loadConnectionString();            
             return getConnection();
         }
