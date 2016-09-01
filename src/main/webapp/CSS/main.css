@@ -1,42 +1,46 @@
-@CHARSET "ISO-8859-1";
 * {
+    font: 11px "Lucida Console", Monaco, monospace;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+html,body {
     margin: 0;
-}
-html, body {
+    padding: 0;
     height: 100%;
+    display: flex;
+    flex-direction: column;    
 }
-.wrapper {
-    min-height: 100%;
-    /*height: auto !important;*/
-    height: 100%;
-    margin: 0 auto -50px; /* the bottom margin is the negative value of the footer's height */
+section {
+    display: flex;
+    flex-grow: 1;
 }
-.footer{
-    height: 50px; /* .push must be the same height as .footer */
+#left_side {
+    min-width: 280px;
+    display: flex;
+    flex-direction: column; 
 }
-.left-side {
-	float:left;
-	width: 300px; 
+#search_bar {
+    display: flex;
 }
-.right-side {
-    float: left;
-    height: 100%;
-    margin-bottom: -50px;
-    width: 350px;
+#search_bar>select {
+    flex-grow: 1;
 }
-table {
-    font-size: smaller;
-    border: 1px solid black;
-    border-collapse: collapse;
+#left_side>form>input[type='date'] {        
+    width: 136px;
 }
-textarea {
+#left_side>textarea {
     width: 100%;
-    height: 320px;
+    min-height: 250px;
 }
-input[type=submit] {
-    float:right;
+#table {
+    overflow: auto;
+    flex-grow: 1;
 }
-label {
-    font-family: monospace;
-    font-size: smaller;
+#table>table {
+    border-collapse: collapse;
+    width: 100%;
+}
+canvas {
+    border: 1px solid lightgrey;
 }

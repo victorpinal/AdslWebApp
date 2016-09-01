@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
@@ -39,7 +40,8 @@ public class MainForm extends ActionSupport implements ParameterAware {
 
     private Vector<Ip_Class> datosIp;           // Listado con las ips de la BBDD
     private int idSelected;                     // id seleccionada en el form
-    private Date fechaIni, fechaFin;   // Fechas de inicio y fin de la muestra
+    private Date fechaIni = Calendar.getInstance().getTime();
+    private Date fechaFin = Calendar.getInstance().getTime();   // Fechas de inicio y fin de la muestra
     private String resumen;                     // resumen de los datos para la id seleccionada
     private Vector<String[]> datos;             // datos para la id seleccionada
 
