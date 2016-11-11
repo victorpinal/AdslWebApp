@@ -4,10 +4,10 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="/CSS/main.css" />
+    <link rel="stylesheet" href="CSS/main.css" />
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.bundle.min.js"></script>
-    <!--<script src="/JS/main.js"></script>-->
+    <!--<script src="JS/main.js"></script>-->
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <!-- meta http-equiv="refresh" content="60"-->
     <title><s:text name="titulo_principal" /></title>
@@ -56,7 +56,6 @@
     <footer>
         <a href="<s:url action='index' namespace='config-browser'/>">Launch the configuration browser</a>
     </footer>
-    <!-- 
     <script>
     $(document).ready(function() {
         
@@ -101,7 +100,6 @@
         
     });
     </script>
-    -->
 </body>
 
 </html>

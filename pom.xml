@@ -46,7 +46,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.5</version>
-            <scope>test</scope>
+            <scope>test</scope>            
         </dependency>
 
         <dependency>
@@ -73,6 +73,14 @@
 
     <build>
         <plugins>
+	        <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-surefire-plugin</artifactId>
+		        <version>2.19.1</version>
+		        <configuration>
+		          <skipTests>true</skipTests>
+		        </configuration>
+	      	</plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
@@ -111,6 +119,8 @@
                     <user>admin</user>
                     <passwordFile>${glassfish.home}/domains/domain1/config/admin-keyfile</passwordFile>
                     <autoCreate>false</autoCreate>
+                    <debug>true</debug>
+                    <echo>true</echo>
                     <domain>                    
                         <name>domain1</name>
                         <httpPort>8080</httpPort>

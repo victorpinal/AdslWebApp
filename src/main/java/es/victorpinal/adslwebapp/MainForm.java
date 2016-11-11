@@ -17,14 +17,17 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts2.interceptor.ParameterAware;
+import org.apache.struts2.interceptor.ServletRequestAware;
 
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * Created by victormanuel on 03/12/2015.
  */
-public class MainForm extends ActionSupport implements ParameterAware {
+public class MainForm extends ActionSupport implements ParameterAware, ServletRequestAware {
 
     private static final long serialVersionUID = 1L;
     private static final Logger _log = Logger.getLogger(MainForm.class.getName());
@@ -44,6 +47,7 @@ public class MainForm extends ActionSupport implements ParameterAware {
     private Date fechaFin = Calendar.getInstance().getTime();   // Fechas de inicio y fin de la muestra
     private String resumen;                     // resumen de los datos para la id seleccionada
     private Vector<String[]> datos;             // datos para la id seleccionada
+    private HttpServletRequest request;
 
     /**************
      * GETTERS/SETTERS
@@ -190,13 +194,17 @@ public class MainForm extends ActionSupport implements ParameterAware {
             _log.severe("getLocalData -> No ha sido posible obtener el nombre de host");
         }
 
-        try {
+        /*try {
             URL whatismyip = new URL("http://checkip.amazonaws.com");
             BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
             ip = in.readLine(); // you get the IP as a String
         } catch (IOException e) {
             _log.severe("getLocalData -> No ha sido posible obtener la ip del host");
-        }
+        }*/
+        
+        ip = request.getRemoteAddr();
+        hostname = request.getRemoteHost();
+        _log.severe("getLocalData -> " + request.getRemoteAddr() + " - " + request.getRemoteHost());
 
         for (Ip_Class e : datosIp) {
             if (e.equals(new Ip_Class(0, ip, hostname)))
@@ -276,5 +284,10 @@ public class MainForm extends ActionSupport implements ParameterAware {
         resumen = sb.toString();
 
     }
+
+	@Override
+	public void setServletRequest(HttpServletRequest arg0) {
+		this.request = arg0;
+	}
 
 }
